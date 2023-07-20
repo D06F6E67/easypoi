@@ -51,13 +51,7 @@
         </dependency>
 
         <!-- PDF -->
-        <dependency>
-            <groupId>com.itextpdf</groupId>
-            <artifactId>itext7-core</artifactId>
-            <type>pom</type>
-			<optional>true</optional>
-        </dependency>
-
+        <!-- 导入table 基于pdfbox的简化组件 -->
         <dependency>
             <groupId>technology.tabula</groupId>
             <artifactId>tabula</artifactId>
@@ -68,6 +62,12 @@
                     <groupId>org.slf4j</groupId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <!-- 导出table 基于pdfbox的简化组件 -->
+        <dependency>
+            <groupId>com.github.vandeseer</groupId>
+            <artifactId>easytable</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <!-- Excel -->

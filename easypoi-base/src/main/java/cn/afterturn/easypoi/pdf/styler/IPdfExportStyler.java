@@ -17,8 +17,8 @@ package cn.afterturn.easypoi.pdf.styler;
 
 
 import cn.afterturn.easypoi.excel.entity.params.ExcelExportEntity;
-import com.itextpdf.kernel.font.PdfFont;
-import com.itextpdf.layout.element.Cell;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.vandeseer.easytable.structure.cell.TextCell;
 
 /**
  * PDF导出样式设置
@@ -34,7 +34,7 @@ public interface IPdfExportStyler {
      * @param entity
      * @param text
      */
-    public void setCellStyler(Cell iCell, ExcelExportEntity entity, String text);
+    public void setCellStyler(TextCell.TextCellBuilder iCell, ExcelExportEntity entity, String text);
 
     /**
      * 获取字体
@@ -42,10 +42,10 @@ public interface IPdfExportStyler {
      * @param entity
      * @param text
      */
-    public PdfFont getFont(ExcelExportEntity entity, String text);
+    public PDFont getFont(ExcelExportEntity entity, String text);
 
     /**
      * 获取字体
      */
-    public PdfFont getFont();
+    public PDFont getFont();
 }

@@ -18,8 +18,7 @@ package cn.afterturn.easypoi.pdf;
 import cn.afterturn.easypoi.excel.entity.params.ExcelExportEntity;
 import cn.afterturn.easypoi.pdf.entity.PdfExportParams;
 import cn.afterturn.easypoi.pdf.export.PdfExportServer;
-import cn.afterturn.easypoi.pdf.export.PdfTemplateServer;
-import com.itextpdf.layout.Document;
+import org.apache.pdfbox.pdmodel.PDDocument;
 
 import java.io.OutputStream;
 import java.util.Collection;
@@ -42,9 +41,9 @@ public class PdfExportUtil {
      * @param pojoClass PDF对象Class
      * @param dataSet   PDF对象数据List
      */
-    public static Document exportPdf(PdfExportParams entity, Class<?> pojoClass,
-                                     Collection<?> dataSet, OutputStream outStream) {
-        return new PdfExportServer(outStream, entity).createPdf(entity, pojoClass, dataSet);
+    public static PDDocument exportPdf(PdfExportParams entity, Class<?> pojoClass,
+                                       Collection<?> dataSet, OutputStream outStream) {
+        return new PdfExportServer(entity).createPdf(entity, pojoClass, dataSet);
     }
 
     /**
@@ -54,23 +53,10 @@ public class PdfExportUtil {
      * @param entityList PDF对象Class
      * @param dataSet    PDF对象数据List
      */
-    public static Document exportPdf(PdfExportParams entity, List<ExcelExportEntity> entityList,
-                                     Collection<? extends Map<?, ?>> dataSet,
-                                     OutputStream outStream) {
+    public static PDDocument exportPdf(PdfExportParams entity, List<ExcelExportEntity> entityList,
+                                       Collection<? extends Map<?, ?>> dataSet) {
 
-        return new PdfExportServer(outStream, entity).createPdfByExportEntity(entity, entityList,
+        return new PdfExportServer(entity).createPdfByExportEntity(entity, entityList,
                 dataSet);
     }
-
-    /**
-     * 解析PDF版本
-     *
-     * @param url 模板地址
-     * @param map 解析数据源
-     * @return
-     */
-    public static Document exportPdf(String url, Map<String, Object> map, OutputStream outStream) throws Exception {
-        return new PdfTemplateServer().parsePdf(url, map, outStream);
-    }
-
 }
