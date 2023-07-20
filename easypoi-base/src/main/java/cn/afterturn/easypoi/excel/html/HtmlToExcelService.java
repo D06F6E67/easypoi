@@ -4,6 +4,10 @@ import java.util.Map;
 import java.util.List;
 
 import cn.afterturn.easypoi.util.PoiMergeCellUtil;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRichTextString;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 import org.jsoup.Jsoup;
 
 import org.slf4j.Logger;
@@ -32,11 +36,6 @@ import org.jsoup.select.Elements;
 import javax.management.RuntimeErrorException;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
 
 /**
@@ -134,7 +133,8 @@ public class HtmlToExcelService {
                 }
                 // no span
                 else {
-                    createCell(td, getOrCreateRow(rowIndex), colIndex).setCellValue(td.text());
+                    Cell cell = createCell(td, getOrCreateRow(rowIndex), colIndex);
+                    cell.setCellValue(getCellValue(cell, td.text()));
                     ++colIndex;
                 }
             }
@@ -148,7 +148,7 @@ public class HtmlToExcelService {
     public Workbook createSheet(String html, Workbook workbook) {
         Elements els = Jsoup.parseBodyFragment(html).select("table");
         Map<String, Sheet> sheets = new HashMap<String, Sheet>();
-        Map<String, Integer> maxrowMap = new HashMap<String, Integer>();
+        Map<String, Integer> maxRowMap = new HashMap<String, Integer>();
         for (Element table : els) {
             String sheetName = table.attr(ExcelCssConstant.SHEET_NAME);
 
@@ -158,7 +158,7 @@ public class HtmlToExcelService {
             }
 
             if (sheets.containsKey(sheetName)) {
-                maxRow = maxrowMap.get(sheetName);
+                maxRow = maxRowMap.get(sheetName);
                 //cellStyles = csStyleMap.get(sheetName);
                 //cellsOccupied = cellsOccupiedMap.get(sheetName);
                 sheet = sheets.get(sheetName);
@@ -170,9 +170,9 @@ public class HtmlToExcelService {
             }
             //生成一个默认样式
             defaultCellStyle = new ExcelExportStylerDefaultImpl(workbook).stringNoneStyle(workbook,
-                false);
+                true);
             processTable(table);
-            maxrowMap.put(sheetName, maxRow);
+            maxRowMap.put(sheetName, maxRow);
             sheets.put(sheetName, sheet);
 
         }
@@ -187,7 +187,8 @@ public class HtmlToExcelService {
             createCell(td, row, colIndex);
             cellsOccupied.put((rowIndex + i) + "_" + colIndex, true);
         }
-        getOrCreateRow(rowIndex).getCell(colIndex).setCellValue(td.text());
+        Cell cell = getOrCreateRow(rowIndex).getCell(colIndex);
+        cell.setCellValue(getCellValue(cell, td.text()));
     }
 
     private void spanCol(Element td, int rowIndex, int colIndex, int colSpan) {
@@ -197,7 +198,17 @@ public class HtmlToExcelService {
         for (int i = 0; i < colSpan; ++i) {
             createCell(td, row, colIndex + i);
         }
-        row.getCell(colIndex).setCellValue(td.text());
+        row.getCell(colIndex).setCellValue(getCellValue(row.getCell(colIndex), td.text()));
+    }
+
+    private RichTextString getCellValue(Cell cell, String text) {
+        RichTextString richText;
+        if (cell instanceof HSSFCell) {
+            richText = new HSSFRichTextString(text);
+        } else {
+            richText = new XSSFRichTextString(text);
+        }
+        return richText;
     }
 
     private void spanRowAndCol(Element td, int rowIndex, int colIndex, int rowSpan, int colSpan) {
@@ -211,7 +222,8 @@ public class HtmlToExcelService {
                 cellsOccupied.put((rowIndex + i) + "_" + (colIndex + j), true);
             }
         }
-        getOrCreateRow(rowIndex).getCell(colIndex).setCellValue(td.text());
+        getOrCreateRow(rowIndex).getCell(colIndex).setCellValue(
+                getCellValue(getOrCreateRow(rowIndex).getCell(colIndex),td.text()));
     }
 
     private Cell createCell(Element td, Row row, int colIndex) {
@@ -225,7 +237,7 @@ public class HtmlToExcelService {
 
     private Cell applyStyle(Element td, Cell cell) {
         String style = td.attr(HtmlCssConstant.STYLE);
-        CellStyle cellStyle = null;
+        CellStyle cellStyle = defaultCellStyle;
         if (StringUtils.isNotBlank(style)) {
             CellStyleEntity styleEntity = cssParse.parseStyle(style.trim());
             cellStyle = cellStyles.get(styleEntity.toString());
