@@ -58,6 +58,18 @@
 			<optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>technology.tabula</groupId>
+            <artifactId>tabula</artifactId>
+            <optional>true</optional>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-simple</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
         <!-- Excel -->
         <dependency>
             <groupId>org.jsoup</groupId>
