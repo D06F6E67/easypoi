@@ -42,13 +42,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.itextpdf</groupId>
-			<artifactId>itext7-core</artifactId>
-			<type>pom</type>
-			<optional>true</optional>
-		</dependency>
-
-		<dependency>
 			<groupId>cn.afterturn</groupId>
 			<artifactId>easypoi-base</artifactId>
 		</dependency>
