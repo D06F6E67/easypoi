@@ -45,9 +45,7 @@ public class PdfImportService extends ImportBaseService {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Excel import start ,class is {}", pojoClass);
         }
-        List result = new ArrayList();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ExcelImportResult importResult;
         byte[] buffer = new byte[1024];
         int len;
         while ((len = inputstream.read(buffer)) > -1) {
@@ -58,6 +56,19 @@ public class PdfImportService extends ImportBaseService {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Excel clone success");
         }
+        return importExcelByIs(PDDocument.load(userIs), pojoClass, params, needMore);
+    }
+
+    /**
+     * Excel 导入 field 字段类型 Integer,Long,Double,Date,String,Boolean
+     */
+    public ExcelImportResult importExcelByIs(PDDocument pdDocument, Class<?> pojoClass,
+                                             ImportParams params, boolean needMore) throws Exception {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Excel import start ,class is {}", pojoClass);
+        }
+        List result = new ArrayList();
+        ExcelImportResult importResult;
         String targetId = null;
         Field[] fileds = PoiPublicUtil.getClassFields(pojoClass);
         ExcelTarget etarget = pojoClass.getAnnotation(ExcelTarget.class);
@@ -67,7 +78,7 @@ public class PdfImportService extends ImportBaseService {
         Map<String, ExcelImportEntity> excelParams = new HashMap<>();
         List<ExcelCollectionParams> excelCollection = new ArrayList<>();
         getAllExcelField("", fileds, excelParams, excelCollection, pojoClass, null, null);
-        document = PDDocument.load(userIs);
+        document = pdDocument;
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Document create success");
         }

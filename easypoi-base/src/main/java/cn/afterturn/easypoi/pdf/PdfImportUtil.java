@@ -17,6 +17,7 @@ package cn.afterturn.easypoi.pdf;
 
 import cn.afterturn.easypoi.excel.entity.ImportParams;
 import cn.afterturn.easypoi.pdf.imports.PdfImportService;
+import org.apache.pdfbox.pdmodel.PDDocument;
 
 import java.io.InputStream;
 import java.util.List;
@@ -42,5 +43,18 @@ public class PdfImportUtil {
     public static <T> List<T> importExcel(InputStream inputstream, Class<?> pojoClass,
                                           ImportParams params) throws Exception {
         return new PdfImportService().importExcelByIs(inputstream, pojoClass, params, false).getList();
+    }
+    /**
+     * PDF的Excel导入 数据源IO流,不返回校验结果 导入 字段类型 Integer,Long,Double,Date,String,Boolean
+     *
+     * @param inputstream
+     * @param pojoClass
+     * @param params
+     * @return
+     * @throws Exception
+     */
+    public static <T> List<T> importExcel(PDDocument document, Class<?> pojoClass,
+                                          ImportParams params) throws Exception {
+        return new PdfImportService().importExcelByIs(document, pojoClass, params, false).getList();
     }
 }
