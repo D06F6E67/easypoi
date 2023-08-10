@@ -18,6 +18,7 @@ package cn.afterturn.easypoi.pdf;
 import cn.afterturn.easypoi.excel.entity.ImportParams;
 import cn.afterturn.easypoi.pdf.imports.PdfImportService;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import technology.tabula.extractors.ExtractionAlgorithm;
 
 import java.io.InputStream;
 import java.util.List;
@@ -44,6 +45,21 @@ public class PdfImportUtil {
                                           ImportParams params) throws Exception {
         return new PdfImportService().importExcelByIs(inputstream, pojoClass, params, false).getList();
     }
+
+    /**
+     * PDF的Excel导入 数据源PDDocument,不返回校验结果 导入 字段类型 Integer,Long,Double,Date,String,Boolean
+     *
+     * @param document
+     * @param pojoClass
+     * @param params
+     * @return
+     * @throws Exception
+     */
+    public static <T> List<T> importExcel(PDDocument document, Class<?> pojoClass,
+                                          ImportParams params) throws Exception {
+        return new PdfImportService().importExcelByIs(document, pojoClass, params, false).getList();
+    }
+
     /**
      * PDF的Excel导入 数据源IO流,不返回校验结果 导入 字段类型 Integer,Long,Double,Date,String,Boolean
      *
@@ -53,8 +69,26 @@ public class PdfImportUtil {
      * @return
      * @throws Exception
      */
+    public static <T> List<T> importExcel(InputStream inputstream, Class<?> pojoClass,
+                                          ImportParams params, ExtractionAlgorithm algorithm) throws Exception {
+        PdfImportService pdfImportService = new PdfImportService();
+        pdfImportService.setAlgorithm(algorithm);
+        return pdfImportService.importExcelByIs(inputstream, pojoClass, params, false).getList();
+    }
+
+    /**
+     * PDF的Excel导入 数据源PDDocument,不返回校验结果 导入 字段类型 Integer,Long,Double,Date,String,Boolean
+     *
+     * @param document
+     * @param pojoClass
+     * @param params
+     * @return
+     * @throws Exception
+     */
     public static <T> List<T> importExcel(PDDocument document, Class<?> pojoClass,
-                                          ImportParams params) throws Exception {
-        return new PdfImportService().importExcelByIs(document, pojoClass, params, false).getList();
+                                          ImportParams params, ExtractionAlgorithm algorithm) throws Exception {
+        PdfImportService pdfImportService = new PdfImportService();
+        pdfImportService.setAlgorithm(algorithm);
+        return pdfImportService.importExcelByIs(document, pojoClass, params, false).getList();
     }
 }

@@ -17,6 +17,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import technology.tabula.*;
+import technology.tabula.extractors.ExtractionAlgorithm;
 import technology.tabula.extractors.SpreadsheetExtractionAlgorithm;
 
 import java.io.ByteArrayInputStream;
@@ -36,6 +37,7 @@ public class PdfImportService extends ImportBaseService {
 
     private static Logger LOGGER = LoggerFactory.getLogger(PdfImportService.class);
     private PDDocument document;
+    private ExtractionAlgorithm algorithm =  new SpreadsheetExtractionAlgorithm();
 
     /**
      * Excel 导入 field 字段类型 Integer,Long,Double,Date,String,Boolean
@@ -104,7 +106,6 @@ public class PdfImportService extends ImportBaseService {
     private Collection importExcel(List result, PDDocument document, Class<?> pojoClass, ImportParams params, Map<String, ExcelImportEntity> excelParams, List<ExcelCollectionParams> excelCollection) throws Exception {
         // 读取表格
         List<Map<String, String>> maps = new ArrayList<>();
-        SpreadsheetExtractionAlgorithm sea = new SpreadsheetExtractionAlgorithm();
         PageIterator pi = new ObjectExtractor(document).extract();
         Map<String, String> cellMap;
         int rowNum = 0;// 行计数器
@@ -114,7 +115,7 @@ public class PdfImportService extends ImportBaseService {
             Page page = pi.next();
             if (pageNum++ < 1) {
                 // 第一页获取一下表头
-                List<Table> tables = sea.extract(page);
+                List<Table> tables = (List<Table>) algorithm.extract(page);
                 for (Table table : tables) {
                     List<List<RectangularTextContainer>> rows = table.getRows();
                     if (rows.size() <= params.getHeadRows()) {
@@ -152,7 +153,7 @@ public class PdfImportService extends ImportBaseService {
                     }
                 }
             } else {
-                List<Table> tables = sea.extract(page);
+                List<Table> tables = (List<Table>) algorithm.extract(page);
                 for (Table table : tables) {
                     List<List<RectangularTextContainer>> rows = table.getRows();
                     for (List<RectangularTextContainer> row : rows) {
@@ -194,5 +195,9 @@ public class PdfImportService extends ImportBaseService {
             }
         }
         return titlemap;
+    }
+
+    public void setAlgorithm(ExtractionAlgorithm algorithm) {
+        this.algorithm = algorithm;
     }
 }
