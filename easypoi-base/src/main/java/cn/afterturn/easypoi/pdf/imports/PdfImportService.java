@@ -2,13 +2,13 @@ package cn.afterturn.easypoi.pdf.imports;
 
 import cn.afterturn.easypoi.entity.BaseTypeConstants;
 import cn.afterturn.easypoi.excel.annotation.ExcelTarget;
-import cn.afterturn.easypoi.excel.entity.ImportParams;
 import cn.afterturn.easypoi.excel.entity.params.ExcelCollectionParams;
 import cn.afterturn.easypoi.excel.entity.params.ExcelImportEntity;
 import cn.afterturn.easypoi.excel.entity.result.ExcelImportResult;
 import cn.afterturn.easypoi.excel.imports.base.ImportBaseService;
 import cn.afterturn.easypoi.exception.excel.ExcelImportException;
 import cn.afterturn.easypoi.exception.excel.enums.ExcelImportEnum;
+import cn.afterturn.easypoi.pdf.entity.PdfImportParams;
 import cn.afterturn.easypoi.util.PoiPublicUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
@@ -43,7 +43,7 @@ public class PdfImportService extends ImportBaseService {
      * Excel 导入 field 字段类型 Integer,Long,Double,Date,String,Boolean
      */
     public ExcelImportResult importExcelByIs(InputStream inputstream, Class<?> pojoClass,
-                                             ImportParams params, boolean needMore) throws Exception {
+                                             PdfImportParams params, boolean needMore) throws Exception {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Excel import start ,class is {}", pojoClass);
         }
@@ -65,7 +65,7 @@ public class PdfImportService extends ImportBaseService {
      * Excel 导入 field 字段类型 Integer,Long,Double,Date,String,Boolean
      */
     public ExcelImportResult importExcelByIs(PDDocument pdDocument, Class<?> pojoClass,
-                                             ImportParams params, boolean needMore) throws Exception {
+                                             PdfImportParams params, boolean needMore) throws Exception {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Excel import start ,class is {}", pojoClass);
         }
@@ -103,7 +103,7 @@ public class PdfImportService extends ImportBaseService {
         return importResult;
     }
 
-    private Collection importExcel(List result, PDDocument document, Class<?> pojoClass, ImportParams params, Map<String, ExcelImportEntity> excelParams, List<ExcelCollectionParams> excelCollection) throws Exception {
+    private Collection importExcel(List result, PDDocument document, Class<?> pojoClass, PdfImportParams params, Map<String, ExcelImportEntity> excelParams, List<ExcelCollectionParams> excelCollection) throws Exception {
         // 读取表格
         List<Map<String, String>> maps = new ArrayList<>();
         PageIterator pi = new ObjectExtractor(document).extract();
@@ -141,8 +141,13 @@ public class PdfImportService extends ImportBaseService {
                         Object object = PoiPublicUtil.createObject(pojoClass, "");
                         for (int k = 0; k < row.size(); k++) {
                             RectangularTextContainer cell = row.get(k);
-                            String cellText = cell.getText();
-                            cellText = cellText == null ? "" : cellText.trim();
+                            String cellText;
+                            if (params.getCellHandler() != null){
+                                cellText = params.getCellHandler().getValue(cell);
+                            } else {
+                                cellText = cell.getText();
+                                cellText = cellText == null ? "" : cellText.trim();
+                            }
                             String titleString = (String) titlemap.get(k);
                             if (excelParams.containsKey(titleString)) {
                                 setValues(excelParams.get(titleString), object, cellText);
@@ -176,7 +181,7 @@ public class PdfImportService extends ImportBaseService {
         return result;
     }
 
-    private Map<Integer, String> getTitleMap(List<RectangularTextContainer> row, ImportParams params, List<ExcelCollectionParams> excelCollection, Map<String, ExcelImportEntity> excelParams) {
+    private Map<Integer, String> getTitleMap(List<RectangularTextContainer> row, PdfImportParams params, List<ExcelCollectionParams> excelCollection, Map<String, ExcelImportEntity> excelParams) {
         Map<Integer, String> titlemap = new LinkedHashMap<Integer, String>();
         String collectionName = null;
         for (int k = 0; k < row.size(); k++) {

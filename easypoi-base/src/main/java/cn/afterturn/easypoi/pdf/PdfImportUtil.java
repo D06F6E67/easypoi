@@ -15,7 +15,7 @@
  */
 package cn.afterturn.easypoi.pdf;
 
-import cn.afterturn.easypoi.excel.entity.ImportParams;
+import cn.afterturn.easypoi.pdf.entity.PdfImportParams;
 import cn.afterturn.easypoi.pdf.imports.PdfImportService;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import technology.tabula.extractors.ExtractionAlgorithm;
@@ -42,7 +42,7 @@ public class PdfImportUtil {
      * @throws Exception
      */
     public static <T> List<T> importExcel(InputStream inputstream, Class<?> pojoClass,
-                                          ImportParams params) throws Exception {
+                                          PdfImportParams params) throws Exception {
         return new PdfImportService().importExcelByIs(inputstream, pojoClass, params, false).getList();
     }
 
@@ -56,7 +56,7 @@ public class PdfImportUtil {
      * @throws Exception
      */
     public static <T> List<T> importExcel(PDDocument document, Class<?> pojoClass,
-                                          ImportParams params) throws Exception {
+                                          PdfImportParams params) throws Exception {
         return new PdfImportService().importExcelByIs(document, pojoClass, params, false).getList();
     }
 
@@ -70,7 +70,7 @@ public class PdfImportUtil {
      * @throws Exception
      */
     public static <T> List<T> importExcel(InputStream inputstream, Class<?> pojoClass,
-                                          ImportParams params, ExtractionAlgorithm algorithm) throws Exception {
+                                          PdfImportParams params, ExtractionAlgorithm algorithm) throws Exception {
         PdfImportService pdfImportService = new PdfImportService();
         pdfImportService.setAlgorithm(algorithm);
         return pdfImportService.importExcelByIs(inputstream, pojoClass, params, false).getList();
@@ -86,7 +86,7 @@ public class PdfImportUtil {
      * @throws Exception
      */
     public static <T> List<T> importExcel(PDDocument document, Class<?> pojoClass,
-                                          ImportParams params, ExtractionAlgorithm algorithm) throws Exception {
+                                          PdfImportParams params, ExtractionAlgorithm algorithm) throws Exception {
         PdfImportService pdfImportService = new PdfImportService();
         pdfImportService.setAlgorithm(algorithm);
         return pdfImportService.importExcelByIs(document, pojoClass, params, false).getList();
