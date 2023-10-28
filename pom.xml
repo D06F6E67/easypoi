@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>cn.afterturn</groupId>
     <artifactId>easypoi</artifactId>
-    <version>4.4.0</version>
+    <version>4.5.0</version>
     <packaging>pom</packaging>
     <name>easypoi</name>
     <modules>
@@ -25,15 +25,15 @@
     </licenses>
 
     <scm>
-        <connection>https://github.com/jueyue/easypoi.git</connection>
-        <developerConnection>https://github.com/jueyue/easypoi.git</developerConnection>
-        <url>https://github.com/jueyue/easypoi.git</url>
+        <connection>https://gitee.com/lemur/easypoi.git</connection>
+        <developerConnection>https://gitee.com/lemur/easypoi.git</developerConnection>
+        <url>https://gitee.com/lemur/easypoi.git</url>
     </scm>
 
     <developers>
         <developer>
             <name>JueYue</name>
-            <email>quranbo@foxmail.com</email>
+            <email>wuyundev@163.com</email>
         </developer>
         <developer>
             <name>魔幻之翼</name>
@@ -47,7 +47,7 @@
     </organization>
 
     <properties>
-        <sub.version>4.4.0</sub.version>
+        <sub.version>4.5.0</sub.version>
         <poi.version>4.1.1</poi.version>
         <xerces.version>2.9.1</xerces.version>
         <guava.version>16.0.1</guava.version>
@@ -240,7 +240,7 @@
                 <artifactId>nexus-staging-maven-plugin</artifactId>
                 <version>1.6.5</version>
                 <configuration>
-                    <serverId>ossrh</serverId>
+                    <serverId>oss-release</serverId>
                     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
@@ -265,6 +265,20 @@
                     <target>1.8</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <id>oss-release</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

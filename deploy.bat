@@ -1,1 +1,1 @@
-cmd /k mvn clean deploy -Dmaven.test.skip=true
+cmd /k mvn clean deploy -Dmaven.test.skip=true -P=oss-release
