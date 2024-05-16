@@ -283,14 +283,16 @@
     </build>
 
     <distributionManagement>
-        <repository>
-            <id>oss-release</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-        </repository>
+        <!--配置 snapshot 版本的 jar 包上传的目标仓库和地址-->
         <snapshotRepository>
-            <id>oss-snapshot</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <id>maven-snapshots</id>
+            <url>http://maven.cc/repository/maven-snapshots/</url>
         </snapshotRepository>
+        <!--配置 release 版本的 jar 包上传的目标仓库和地址-->
+        <repository>
+            <id>maven-releases</id>
+            <url>http://maven.cc/repository/maven-releases/</url>
+        </repository>
     </distributionManagement>
 
 </project>
