@@ -2,6 +2,7 @@ package cn.afterturn.easypoi.excel.export.template;
 
 import static cn.afterturn.easypoi.util.PoiElUtil.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -80,7 +81,7 @@ public class TemplateSumHandler {
 
     public void addValueOfKey(String key, String val) {
         if (StringUtils.isNoneEmpty(key)) {
-            sumMap.get(key).setValue(sumMap.get(key).getValue() + Double.valueOf(val));
+            sumMap.get(key).setValue(sumMap.get(key).getValue().add(new BigDecimal(val)));
         }
     }
 
@@ -127,6 +128,4 @@ public class TemplateSumHandler {
         }
         return -1;
     }
-
-
 }

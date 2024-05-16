@@ -441,10 +441,11 @@ public final class ExcelExportOfTemplateUtil extends BaseExportService {
         for (TemplateSumEntity sumEntity : templateSumHandler.getDataList()) {
             Cell cell = sheet.getRow(sumEntity.getRow()).getCell(sumEntity.getCol());
             if (cell.getStringCellValue().contains(sumEntity.getSumKey())) {
-                cell.setCellValue(cell.getStringCellValue()
-                        .replace("sum:(" + sumEntity.getSumKey() + ")", sumEntity.getValue() + ""));
+                // cell.setCellValue(cell.getStringCellValue()
+                //         .replace("sum:(" + sumEntity.getSumKey() + ")", sumEntity.getValue().doubleValue()));
+                cell.setCellValue(sumEntity.getValue().doubleValue());
             } else {
-                cell.setCellValue(cell.getStringCellValue() + sumEntity.getValue());
+                cell.setCellValue(cell.getStringCellValue() + sumEntity.getValue().doubleValue());
             }
         }
     }

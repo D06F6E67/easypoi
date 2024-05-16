@@ -2,6 +2,8 @@ package cn.afterturn.easypoi.excel.entity;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 /**
  * 统计对象
  *
@@ -29,6 +31,12 @@ public class TemplateSumEntity {
     /**
      * 最后值
      */
-    private double value;
+    private BigDecimal value;
 
+    public BigDecimal getValue() {
+        if (value == null) {
+            value = BigDecimal.ZERO;
+        }
+        return value;
+    }
 }
