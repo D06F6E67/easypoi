@@ -361,7 +361,7 @@ public final class PoiPublicUtil {
     public static Object getRealValue(String currentText,
                                       Map<String, Object> map) throws Exception {
         String params = "";
-        while (currentText.indexOf(START_STR) != -1) {
+        while (currentText.contains(START_STR)) {
             params = currentText.substring(currentText.indexOf(START_STR) + 2, currentText.indexOf(END_STR));
             Object obj = PoiElUtil.eval(params.trim(), map);
             //判断图片或者是集合

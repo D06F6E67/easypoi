@@ -16,6 +16,7 @@
 package cn.afterturn.easypoi.util;
 
 import cn.afterturn.easypoi.exception.excel.ExcelExportException;
+import org.apache.poi.ss.usermodel.Sheet;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -30,6 +31,9 @@ import java.util.Stack;
  */
 public final class PoiElUtil {
 
+    /**
+     * 长度 le:(colList) colList数组的长度
+     */
     public static final String LENGTH             = "le:";
     public static final String FOREACH            = "fe:";
     public static final String FOREACH_NOT_CREATE = "!fe:";
@@ -39,11 +43,29 @@ public final class PoiElUtil {
     public static final String START_STR          = "{{";
     public static final String END_STR            = "}}";
     public static final String WRAP               = "]]";
+    /**
+     * 数字类型
+     */
     public static final String NUMBER_SYMBOL      = "n:";
+    /**
+     * 横向合并 merge:合并的单元格数量
+     */
     public static final String MERGE              = "merge:";
+    /**
+     * 纵向合并相邻内容相同的单元格 merge_col:(父级)  第一级写空
+     * 例如两列name           age
+     *        merge_col:()   merge_col:()      两列各自合并互不干扰
+     *        merge_col:()   merge_col:(name)  name合并，age相同name下的才会合并
+     *
+     * @see cn.afterturn.easypoi.util.PoiMergeCellUtil#mergeCells(Sheet, Map, int)
+     */
+    public static final String MERGE_COL          = "merge_col:";
     public static final String STYLE_SELF         = "sy:";
     public static final String FORMAT_DATE        = "fd:";
     public static final String FORMAT_NUMBER      = "fn:";
+    /**
+     * 求和 sum:(amount) 将amount求和
+     */
     public static final String SUM                = "sum:";
     public static final String IF_DELETE          = "!if:";
     public static final String EMPTY              = "";
@@ -52,6 +74,9 @@ public final class PoiElUtil {
     public static final String INDEX              = "&INDEX&";
     public static final String LEFT_BRACKET       = "(";
     public static final String RIGHT_BRACKET      = ")";
+    /**
+     * 计算表达式 cal:2*3 会计算改值，可用其他组合函数 cal:le:(colList) * 3
+     */
     public static final String CAL                = "cal:";
     public static final String DICT_HANDLER       = "dict:";
     public static final String I18N_HANDLER       = "i18n:";

@@ -68,6 +68,7 @@ public final class ExcelExportOfTemplateUtil extends BaseExportService {
     private MergedRegionHelper   mergedRegionHelper;
 
     private TemplateSumHandler templateSumHandler;
+    private TemplateMergeColHandler templateMergeColHandler;
 
     /**
      * 往Sheet 填充正常数据,根据表头信息 使用导入的部分逻辑,坐对象映射
@@ -415,6 +416,7 @@ public final class ExcelExportOfTemplateUtil extends BaseExportService {
         deleteCell(sheet, map);
         mergedRegionHelper = new MergedRegionHelper(sheet);
         templateSumHandler = new TemplateSumHandler(sheet);
+        templateMergeColHandler = new TemplateMergeColHandler(sheet);
         if (colForeach) {
             colForeach(sheet, map);
         }
@@ -433,6 +435,8 @@ public final class ExcelExportOfTemplateUtil extends BaseExportService {
             }
         }
 
+        // 合并同类项
+        PoiMergeCellUtil.mergeCells(sheet, templateMergeColHandler.getDataList(), templateMergeColHandler.getStartRow());
         //修改需要处理的统计值
         handlerSumCell(sheet);
     }
@@ -641,7 +645,8 @@ public final class ExcelExportOfTemplateUtil extends BaseExportService {
                 LOGGER.error(e.getMessage(),e);
             }
         }
-        Object obj = funStr.indexOf(START_STR) == -1 ? eval(funStr, map) : PoiPublicUtil.getRealValue(funStr, map);
+        templateMergeColHandler.addKey(funStr, cell);
+        Object obj = !funStr.contains(START_STR) ? eval(funStr, map) : PoiPublicUtil.getRealValue(funStr, map);
         if (isDict) {
             obj = dictHandler.toName(dict, null, funStr, obj);
         }
