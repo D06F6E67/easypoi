@@ -35,13 +35,25 @@ public final class PoiElUtil {
      * 长度 le:(colList) colList数组的长度
      */
     public static final String LENGTH             = "le:";
+    /**
+     * 遍历数据,创建row
+     */
     public static final String FOREACH            = "fe:";
+    /**
+     * 遍历数据不创建row
+     */
     public static final String FOREACH_NOT_CREATE = "!fe:";
+    /**
+     * 下移插入,把当前行,下面的行全部下移.size()行,然后插入
+     */
     public static final String FOREACH_AND_SHIFT  = "$fe:";
     public static final String FOREACH_COL        = "#fe:";
     public static final String FOREACH_COL_VALUE  = "v_fe:";
     public static final String START_STR          = "{{";
     public static final String END_STR            = "}}";
+    /**
+     * 换行符
+     */
     public static final String WRAP               = "]]";
     /**
      * 数字类型
@@ -67,8 +79,14 @@ public final class PoiElUtil {
      * 求和 sum:(amount) 将amount求和
      */
     public static final String SUM                = "sum:";
+    /**
+     * 删除当前列 {{!if:(test)}}
+     */
     public static final String IF_DELETE          = "!if:";
     public static final String EMPTY              = "";
+    /**
+     * 单引号表示常量值 '' 比如'1' 那么输出的就是 1
+     */
     public static final String CONST              = "'";
     public static final String NULL               = "&NULL&";
     public static final String INDEX              = "&INDEX&";

@@ -100,6 +100,11 @@ public class TemplateMergeColHandler {
     }
 
     public Map<Integer, int[]> getDataList() {
+
+        if (keyMap.isEmpty()) {
+            return mergeMap;
+        }
+
         mergeColMap.forEach((key, value) -> {
             int[] rely = new int[value.length];
             for (int i = 0; i < value.length; i++) {
